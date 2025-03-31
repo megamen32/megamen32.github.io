@@ -114,8 +114,8 @@
       const maxViews = subs * 0.8;
       const minReacts = minViews * 0.02;
       const maxReacts = maxViews * 0.05;
-      const comments = ((minViews + maxViews) / 2) * 0.01;
-      const reposts = ((minViews + maxViews) / 2) * 0.005;
+      const comments = ((minViews + maxViews) / 2) * 0.005;
+      const reposts = ((minViews + maxViews) / 2) * 0.015;
 
       viewsDiv.textContent = `👁️ Просмотры: ~${format(minViews)} – ${format(maxViews)} за пост`;
       reactionsDiv.textContent = `❤️ Реакции: ~${format(minReacts)} – ${format(maxReacts)} за пост`;
