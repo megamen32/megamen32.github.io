@@ -112,6 +112,10 @@
       <label for="postsInput">Постов в месяц:</label>
       <input type="number" id="postsInput" value="30" min="0"/>
     </div>
+    <div class="flex-col">
+      <label for="percentInput">% новых подписчиков:</label>
+      <input type="number" id="percentInput" value="10" min="0" max="100"/>
+    </div>
   </div>
 
   <!-- Статистика за 1 пост -->
@@ -211,7 +215,7 @@
           <td>Комментарии</td>
           <td id="commentsQty" class="right">0</td>
           <td id="commentsCPrice" class="right">7</td>
-          <td id="commentsOPrice" class="right">0.75</td>
+          <td id="commentsOPrice" class="right">1</td>
           <td id="commentsCompetitorCost" class="right price">0 ₽</td>
           <td id="commentsOurCost" class="right price">0 ₽</td>
         </tr>
@@ -245,6 +249,7 @@
   // Поля ввода
   const subsInput       = document.getElementById('subsInput');
   const postsInput      = document.getElementById('postsInput');
+  const percentInput    = document.getElementById('percentInput');
   const viewsPostInput  = document.getElementById('viewsPost');
   const reactsPostInput = document.getElementById('reactsPost');
   const commentsPostInput = document.getElementById('commentsPost');
@@ -294,6 +299,7 @@
     autoFillPostStats();
     recalcAll();
   });
+  percentInput.addEventListener('input', recalcAll);
   // При изменении "постов" или ручном изменении полей "за 1 пост" — пересчёт
   postsInput.addEventListener('input', recalcAll);
   viewsPostInput.addEventListener('input', recalcAll);
@@ -335,7 +341,8 @@
     const repsMonth      = repsPost   * posts;
     // — «Подписчики за месяц» условно считаем subs * posts (как в ранних примерах),
     //   либо здесь можно изменить логику, если нужно другое
-    const subsMonth      = subs * posts;
+    const percentNew = parseFloat(percentInput.value) || 0;
+    const subsMonth = subs * (percentNew / 100);
 
     // Запишем в блок "Статистика за месяц" (только чтение)
     viewsMonthEl.textContent    = formatNumber(viewsMonth);
