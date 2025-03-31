@@ -20,7 +20,7 @@
       background: rgba(255, 255, 255, 0.1);
       padding: 30px;
       border-radius: 20px;
-      max-width: 400px;
+      max-width: 450px;
       width: 100%;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
@@ -46,13 +46,14 @@
       font-size: 16px;
     }
 
-    .result {
+    .result, .estimate {
       background: rgba(255, 255, 255, 0.15);
       padding: 15px;
       border-radius: 12px;
       text-align: center;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 10px;
     }
 
     .note {
@@ -73,6 +74,11 @@
     <input type="number" id="posts" value="30" min="0" />
 
     <div class="result" id="result">💰 Стоимость: 30 000 ₽</div>
+    <div class="estimate" id="views">👁️ Просмотры: ~7 000 – 8 000 за пост</div>
+    <div class="estimate" id="reactions">❤️ Реакции: ~140 – 400 за пост</div>
+    <div class="estimate" id="comments">💬 Комментарии: ~100 за пост</div>
+    <div class="estimate" id="reposts">🔄 Репосты: ~25 за пост</div>
+
     <div class="note">Скидка 30% от 50 000 подписчиков, 50% — от 100 000</div>
   </div>
 
@@ -80,6 +86,14 @@
     const subsInput = document.getElementById("subs");
     const postsInput = document.getElementById("posts");
     const resultDiv = document.getElementById("result");
+    const viewsDiv = document.getElementById("views");
+    const reactionsDiv = document.getElementById("reactions");
+    const commentsDiv = document.getElementById("comments");
+    const repostsDiv = document.getElementById("reposts");
+
+    function format(n) {
+      return Math.round(n).toLocaleString("ru-RU");
+    }
 
     function calculate() {
       const subs = parseInt(subsInput.value, 10) || 0;
@@ -89,14 +103,24 @@
       let price = subs * posts * baseRate;
       let discount = 0;
 
-      if (subs >= 100000) {
-        discount = 0.5;
-      } else if (subs >= 50000) {
-        discount = 0.3;
-      }
+      if (subs >= 100000) discount = 0.5;
+      else if (subs >= 50000) discount = 0.3;
 
       const finalPrice = Math.round(price * (1 - discount));
-      resultDiv.textContent = `💰 Стоимость: ${finalPrice.toLocaleString()} ₽`;
+      resultDiv.textContent = `💰 Стоимость: ${format(finalPrice)} ₽`;
+
+      // Прогнозы на 1 пост
+      const minViews = subs * 0.6;
+      const maxViews = subs * 0.8;
+      const minReacts = minViews * 0.02;
+      const maxReacts = maxViews * 0.05;
+      const comments = ((minViews + maxViews) / 2) * 0.01;
+      const reposts = ((minViews + maxViews) / 2) * 0.005;
+
+      viewsDiv.textContent = `👁️ Просмотры: ~${format(minViews)} – ${format(maxViews)} за пост`;
+      reactionsDiv.textContent = `❤️ Реакции: ~${format(minReacts)} – ${format(maxReacts)} за пост`;
+      commentsDiv.textContent = `💬 Комментарии: ~${format(comments)} за пост`;
+      repostsDiv.textContent = `🔄 Репосты: ~${format(reposts)} за пост`;
     }
 
     subsInput.addEventListener("input", calculate);
