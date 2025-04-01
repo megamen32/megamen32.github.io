@@ -169,8 +169,8 @@
   </div>
 
   <!-- Сравнительный калькулятор -->
-  <div class="final-table">
-    <h2>Сравнение цен за месяц</h2>
+  <div class="final-table" style="overflow-x: auto; width: 100%;">
+    <h2>Сравнение c cheatbot.ru цен за месяц</h2>
     <table>
       <thead>
         <tr>
@@ -187,7 +187,7 @@
         <tr>
           <td>Подписчики</td>
           <td id="subsQty" class="right">0</td>
-          <td id="subsCPrice" class="right">0.15</td>    <!-- можно менять на свои -->
+          <td id="subsCPrice" class="right">3</td>    <!-- можно менять на свои -->
           <td id="subsOPrice" class="right">0.4375</td>  <!-- можно менять на свои -->
           <td id="subsCompetitorCost" class="right price">0 ₽</td>
           <td id="subsOurCost" class="right price">0 ₽</td>
@@ -196,7 +196,7 @@
         <tr>
           <td>Просмотры</td>
           <td id="viewsQty" class="right">0</td>
-          <td id="viewsCPrice" class="right">0.04</td>   <!-- можно менять на свои -->
+          <td id="viewsCPrice" class="right">0.1</td>   <!-- можно менять на свои -->
           <td id="viewsOPrice" class="right">0.015</td>  <!-- можно менять на свои -->
           <td id="viewsCompetitorCost" class="right price">0 ₽</td>
           <td id="viewsOurCost" class="right price">0 ₽</td>
@@ -205,8 +205,8 @@
         <tr>
           <td>Реакции</td>
           <td id="reactsQty" class="right">0</td>
-          <td id="reactsCPrice" class="right">0.08</td>
-          <td id="reactsOPrice" class="right">0.10</td>
+          <td id="reactsCPrice" class="right">0.1</td>
+          <td id="reactsOPrice" class="right">0.1</td>
           <td id="reactsCompetitorCost" class="right price">0 ₽</td>
           <td id="reactsOurCost" class="right price">0 ₽</td>
         </tr>
@@ -223,7 +223,7 @@
         <tr>
           <td>Репосты</td>
           <td id="repostsQty" class="right">0</td>
-          <td id="repostsCPrice" class="right">0.05</td>
+          <td id="repostsCPrice" class="right">0.3</td>
           <td id="repostsOPrice" class="right">0.0575</td>
           <td id="repostsCompetitorCost" class="right price">0 ₽</td>
           <td id="repostsOurCost" class="right price">0 ₽</td>
@@ -241,6 +241,7 @@
         </tr>
       </tfoot>
     </table>
+    <div style="text-align: center;">(данные cheatbot.ru от 01.04.2025)</div>
   </div>
 </div>
 
@@ -416,6 +417,91 @@
   // Инициализация
   autoFillPostStats();
   recalcAll();
+</script>
+<div class="slider-container">
+  <div class="slider-track" id="sliderTrack">
+    <div class="slide"><img src="followers.png" alt="Подписчики"></div>
+    <div class="slide"><img src="views.png" alt="Просмотры"></div>
+    <div class="slide"><img src="reactions.png" alt="Реакции"></div>
+    <div class="slide"><img src="comments.png" alt="Комментарии"></div>
+  </div>
+  <div class="slider-buttons">
+    <button onclick="prevSlide()">←</button>
+    <button onclick="nextSlide()">→</button>
+  </div>
+</div>
+<style>
+body {
+  display: flex;
+  flex-direction: column; /* вертикально, а не в ряд */
+  align-items: center;     /* по центру */
+  padding: 20px;
+  font-family: sans-serif;
+}
+  .content {
+    width: 60%;
+  }
+
+  .slider-container {
+    width: 35%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  .slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .slide {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .slider-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+  }
+
+  .slider-buttons button {
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+</style>
+<script>
+  let currentSlide = 0;
+  const track = document.getElementById('sliderTrack');
+  const totalSlides = track.children.length;
+
+  function updateSlider() {
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateSlider();
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateSlider();
+  }
 </script>
 </body>
 </html>
