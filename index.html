@@ -114,7 +114,7 @@
       font-weight: 600;
     }
 
-    /* Таблица */
+    /* Новая таблица (более узкая) */
     .final-table {
       margin-top: 30px;
       overflow-x: auto; 
@@ -123,9 +123,9 @@
 
     table {
       width: 100%;
-      min-width: 600px; /* минимальная ширина для гор. прокрутки, если нужно */
       border-collapse: collapse;
       margin-top: 10px;
+      min-width: 450px; /* чтобы была прокрутка при совсем узком экране */
     }
 
     th, td {
@@ -283,70 +283,96 @@
       </div>
     </div>
 
-    <!-- Таблица сравнения -->
+    <!-- Новая таблица сравнения (менее широкая) -->
     <div class="final-table">
       <h2>Сравнение c cheatbot.ru цен за месяц</h2>
       <table>
         <thead>
           <tr>
             <th>Параметр</th>
-            <th class="right">Кол-во (шт.)</th>
-            <th class="right">Цена конкурента</th>
-            <th class="right">Цена наша</th>
-            <th class="right">Конкурент итого</th>
-            <th class="right">Мы итого</th>
+            <th class="right">Кол-во</th>
+            <th class="right">Цена</th>
+            <th class="right">Итого</th>
           </tr>
         </thead>
         <tbody>
+          <!-- Подписчики: конкурент + наш -->
           <tr>
-            <td>Подписчики</td>
+            <td>Подписчики (конкурент)</td>
             <td id="subsQty" class="right">0</td>
             <td id="subsCPrice" class="right">3</td>
-            <td id="subsOPrice" class="right">0.4375</td>
             <td id="subsCompetitorCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Подписчики (наш)</td>
+            <td id="subsQtyOur" class="right">0</td>
+            <td id="subsOPrice" class="right">0.4375</td>
             <td id="subsOurCost" class="right price">0 ₽</td>
           </tr>
+
+          <!-- Просмотры: конкурент + наш -->
           <tr>
-            <td>Просмотры</td>
+            <td>Просмотры (конкурент)</td>
             <td id="viewsQty" class="right">0</td>
             <td id="viewsCPrice" class="right">0.11</td>
-            <td id="viewsOPrice" class="right">0.015</td>
             <td id="viewsCompetitorCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Просмотры (наш)</td>
+            <td id="viewsQtyOur" class="right">0</td>
+            <td id="viewsOPrice" class="right">0.015</td>
             <td id="viewsOurCost" class="right price">0 ₽</td>
           </tr>
+
+          <!-- Реакции: конкурент + наш -->
           <tr>
-            <td>Реакции</td>
+            <td>Реакции (конкурент)</td>
             <td id="reactsQty" class="right">0</td>
             <td id="reactsCPrice" class="right">0.1</td>
-            <td id="reactsOPrice" class="right">0.1</td>
             <td id="reactsCompetitorCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Реакции (наш)</td>
+            <td id="reactsQtyOur" class="right">0</td>
+            <td id="reactsOPrice" class="right">0.1</td>
             <td id="reactsOurCost" class="right price">0 ₽</td>
           </tr>
+
+          <!-- Комментарии: конкурент + наш -->
           <tr>
-            <td>Комментарии</td>
+            <td>Комментарии (конкурент)</td>
             <td id="commentsQty" class="right">0</td>
-            <td id="commentsCPrice" class="right">7</td>
-            <td id="commentsOPrice" class="right">1</td>
+            <td id="commentsCPrice" class="right">2</td>
             <td id="commentsCompetitorCost" class="right price">0 ₽</td>
-            <td id="commentsOurCost" class="right price">0 ₽</td>
           </tr>
           <tr>
-            <td>Репосты</td>
+            <td>Комментарии (наш)</td>
+            <td id="commentsQtyOur" class="right">0</td>
+            <td id="commentsOPrice" class="right">1</td>
+            <td id="commentsOurCost" class="right price">0 ₽</td>
+          </tr>
+
+          <!-- Репосты: конкурент + наш -->
+          <tr>
+            <td>Репосты (конкурент)</td>
             <td id="repostsQty" class="right">0</td>
             <td id="repostsCPrice" class="right">0.3</td>
-            <td id="repostsOPrice" class="right">0.0575</td>
             <td id="repostsCompetitorCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Репосты (наш)</td>
+            <td id="repostsQtyOur" class="right">0</td>
+            <td id="repostsOPrice" class="right">0.0575</td>
             <td id="repostsOurCost" class="right price">0 ₽</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <th colspan="4" class="right">Сумма у конкурента:</th>
+            <th colspan="3" class="right">Сумма у конкурента:</th>
             <th id="competitorTotal" class="right price">0 ₽</th>
-            <th></th>
           </tr>
           <tr>
-            <th colspan="5" class="right">Сумма у нас:</th>
+            <th colspan="3" class="right">Сумма у нас:</th>
             <th id="ourTotal" class="right price">0 ₽</th>
           </tr>
         </tfoot>
@@ -386,12 +412,21 @@
   const repostsMonthEl  = document.getElementById('repostsMonth');
   const subsMonthEl     = document.getElementById('subsMonth');
 
-  const subsQtyEl            = document.getElementById('subsQty');
-  const viewsQtyEl           = document.getElementById('viewsQty');
-  const reactsQtyEl          = document.getElementById('reactsQty');
-  const commentsQtyEl        = document.getElementById('commentsQty');
-  const repostsQtyEl         = document.getElementById('repostsQty');
+  // Количество (конкурент)
+  const subsQtyEl       = document.getElementById('subsQty');
+  const viewsQtyEl      = document.getElementById('viewsQty');
+  const reactsQtyEl     = document.getElementById('reactsQty');
+  const commentsQtyEl   = document.getElementById('commentsQty');
+  const repostsQtyEl    = document.getElementById('repostsQty');
 
+  // Количество (наш) – новые ячейки
+  const subsQtyOurEl       = document.getElementById('subsQtyOur');
+  const viewsQtyOurEl      = document.getElementById('viewsQtyOur');
+  const reactsQtyOurEl     = document.getElementById('reactsQtyOur');
+  const commentsQtyOurEl   = document.getElementById('commentsQtyOur');
+  const repostsQtyOurEl    = document.getElementById('repostsQtyOur');
+
+  // Цены
   const subsCPriceEl         = document.getElementById('subsCPrice');
   const subsOPriceEl         = document.getElementById('subsOPrice');
   const viewsCPriceEl        = document.getElementById('viewsCPrice');
@@ -403,19 +438,20 @@
   const repostsCPriceEl      = document.getElementById('repostsCPrice');
   const repostsOPriceEl      = document.getElementById('repostsOPrice');
 
-  const subsCompetitorCostEl = document.getElementById('subsCompetitorCost');
-  const subsOurCostEl        = document.getElementById('subsOurCost');
-  const viewsCompetitorCostEl= document.getElementById('viewsCompetitorCost');
-  const viewsOurCostEl       = document.getElementById('viewsOurCost');
-  const reactsCompetitorCostEl= document.getElementById('reactsCompetitorCost');
-  const reactsOurCostEl      = document.getElementById('reactsOurCost');
-  const commentsCompetitorCostEl= document.getElementById('commentsCompetitorCost');
-  const commentsOurCostEl    = document.getElementById('commentsOurCost');
+  // Итого
+  const subsCompetitorCostEl   = document.getElementById('subsCompetitorCost');
+  const subsOurCostEl          = document.getElementById('subsOurCost');
+  const viewsCompetitorCostEl  = document.getElementById('viewsCompetitorCost');
+  const viewsOurCostEl         = document.getElementById('viewsOurCost');
+  const reactsCompetitorCostEl = document.getElementById('reactsCompetitorCost');
+  const reactsOurCostEl        = document.getElementById('reactsOurCost');
+  const commentsCompetitorCostEl = document.getElementById('commentsCompetitorCost');
+  const commentsOurCostEl      = document.getElementById('commentsOurCost');
   const repostsCompetitorCostEl= document.getElementById('repostsCompetitorCost');
-  const repostsOurCostEl     = document.getElementById('repostsOurCost');
+  const repostsOurCostEl       = document.getElementById('repostsOurCost');
 
-  const competitorTotalEl    = document.getElementById('competitorTotal');
-  const ourTotalEl           = document.getElementById('ourTotal');
+  const competitorTotalEl      = document.getElementById('competitorTotal');
+  const ourTotalEl             = document.getElementById('ourTotal');
 
   // События
   subsInput.addEventListener('input', () => {
@@ -429,7 +465,7 @@
   commentsPostInput.addEventListener('input', recalcAll);
   repostsPostInput.addEventListener('input', recalcAll);
 
-  // Автозаполнение статистики за 1 пост (примерные формулы)
+  // Автозаполнение статистики за 1 пост
   function autoFillPostStats() {
     const subs = parseFloat(subsInput.value) || 0;
     // Примерные формулы (среднее между min=0.6*subs и max=0.8*subs)
@@ -462,18 +498,28 @@
     const percentNew   = parseFloat(percentInput.value) || 0;
     const subsMonth    = subs * (percentNew / 100);
 
+    // Выводим итоги за месяц (блок "Примерная статистика...")
     viewsMonthEl.textContent    = formatNumber(viewsMonth);
     reactsMonthEl.textContent   = formatNumber(reactsMonth);
     commentsMonthEl.textContent = formatNumber(commsMonth);
     repostsMonthEl.textContent  = formatNumber(repsMonth);
     subsMonthEl.textContent     = formatNumber(subsMonth);
 
+    // Кол-во (конкурент)
     subsQtyEl.textContent       = formatNumber(subsMonth);
     viewsQtyEl.textContent      = formatNumber(viewsMonth);
     reactsQtyEl.textContent     = formatNumber(reactsMonth);
     commentsQtyEl.textContent   = formatNumber(commsMonth);
     repostsQtyEl.textContent    = formatNumber(repsMonth);
 
+    // Кол-во (наш) – то же самое, т.к. охваты/кол-во одинаковы
+    subsQtyOurEl.textContent       = formatNumber(subsMonth);
+    viewsQtyOurEl.textContent      = formatNumber(viewsMonth);
+    reactsQtyOurEl.textContent     = formatNumber(reactsMonth);
+    commentsQtyOurEl.textContent   = formatNumber(commsMonth);
+    repostsQtyOurEl.textContent    = formatNumber(repsMonth);
+
+    // Цены
     const subsC  = parseFloat(subsCPriceEl.textContent)  || 0;
     const subsO  = parseFloat(subsOPriceEl.textContent)  || 0;
     const viewsC = parseFloat(viewsCPriceEl.textContent) || 0;
@@ -485,29 +531,37 @@
     const repC   = parseFloat(repostsCPriceEl.textContent) || 0;
     const repO   = parseFloat(repostsOPriceEl.textContent)  || 0;
 
+    // Итого у конкурента
     const competitorSubsCost     = subsMonth * subsC;
     const competitorViewsCost    = viewsMonth * viewsC;
     const competitorReactsCost   = reactsMonth * reacC;
     const competitorCommentsCost = commsMonth * commC;
     const competitorRepostsCost  = repsMonth * repC;
 
+    // Итого у нас
     const ourSubsCost      = subsMonth * subsO;
     const ourViewsCost     = viewsMonth * viewsO;
     const ourReactsCost    = reactsMonth * reacO;
     const ourCommentsCost  = commsMonth * commO;
     const ourRepostsCost   = repsMonth * repO;
 
+    // Запись в таблицу
     subsCompetitorCostEl.textContent      = formatRub(competitorSubsCost);
     subsOurCostEl.textContent             = formatRub(ourSubsCost);
+
     viewsCompetitorCostEl.textContent     = formatRub(competitorViewsCost);
     viewsOurCostEl.textContent            = formatRub(ourViewsCost);
+
     reactsCompetitorCostEl.textContent    = formatRub(competitorReactsCost);
     reactsOurCostEl.textContent           = formatRub(ourReactsCost);
+
     commentsCompetitorCostEl.textContent  = formatRub(competitorCommentsCost);
     commentsOurCostEl.textContent         = formatRub(ourCommentsCost);
+
     repostsCompetitorCostEl.textContent   = formatRub(competitorRepostsCost);
     repostsOurCostEl.textContent          = formatRub(ourRepostsCost);
 
+    // Суммы
     const competitorTotal = competitorSubsCost + competitorViewsCost + competitorReactsCost
                           + competitorCommentsCost + competitorRepostsCost;
     const ourTotal = ourSubsCost + ourViewsCost + ourReactsCost
