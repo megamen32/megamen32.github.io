@@ -2,87 +2,143 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Объединённый калькулятор</title>
   <style>
+    :root {
+      --bg-color: #0088cc;
+      --overlay-color: rgba(255,255,255,0.1);
+      --overlay-color-2: rgba(255,255,255,0.15);
+      --text-color: #fff;
+      --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      --radius-main: 12px;
+      --radius-sub: 8px;
+      --font-main: "Segoe UI", sans-serif;
+    }
+
+    /* Сброс базовых отступов */
     * {
       box-sizing: border-box;
-    }
-    body {
-      background-color: #0088cc;
-      font-family: "Segoe UI", sans-serif;
-      color: white;
-      margin: 0;
+      margin: 0; 
       padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: var(--font-main);
+      color: var(--text-color);
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
     }
+
     .container {
-      background: rgba(255,255,255,0.1);
-      padding: 30px;
-      border-radius: 20px;
-      max-width: 750px;
       width: 100%;
-      margin: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 750px;
+      background: var(--overlay-color);
+      margin: 16px;
+      padding: 20px;
+      border-radius: var(--radius-main);
+      box-shadow: var(--box-shadow);
     }
+
     h1, h2 {
       text-align: center;
-      margin-top: 0;
-      margin-bottom: 20px;
+      margin: 0 0 16px 0;
     }
+
+    /* Описание общего поля слайдера + калькулятора */
+    .main-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Для полей ввода */
     label {
-      display: block;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       font-weight: 500;
+      display: block;
     }
+
     input[type="number"] {
       width: 100%;
       padding: 8px;
-      border-radius: 8px;
+      border-radius: var(--radius-sub);
       border: none;
       font-size: 16px;
       text-align: right;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      outline: none;
     }
+
+    input[type="number"]::placeholder {
+      color: #ddd;
+    }
+
+    /* Гибкая сетка */
     .flex {
       display: flex;
-      gap: 20px;
+      gap: 16px;
+      flex-wrap: wrap;  /* для мобильных экранов элементы переносятся */
     }
+
     .flex-col {
-      flex: 1;
+      flex: 1 1 150px; /* минимальная ширина каждой колонки */
+      display: flex;
+      flex-direction: column;
     }
-    .read-only {
-      background: rgba(255,255,255,0.2);
+
+    /* Отдельные блоки-обёртки */
+    .estimates {
+      margin-top: 20px;
     }
-    .estimates, .final-table {
-      margin-top: 30px;
-    }
+
     .estimate-item {
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      background: var(--overlay-color-2);
+      border-radius: var(--radius-sub);
+      padding: 10px;
+      margin: 6px 0;
+    }
+    .estimate-item div:first-child {
+      flex: 1;
     }
     .estimate-item span {
       font-weight: 600;
     }
+
+    /* Таблица */
+    .final-table {
+      margin-top: 30px;
+      overflow-x: auto; 
+      width: 100%;
+    }
+
     table {
       width: 100%;
+      min-width: 600px; /* минимальная ширина для гор. прокрутки, если нужно */
       border-collapse: collapse;
       margin-top: 10px;
     }
+
     th, td {
       text-align: left;
       padding: 8px;
+      font-size: 15px;
     }
+
     th {
       background: rgba(255,255,255,0.2);
       font-weight: 600;
     }
+
     tr:nth-child(even) {
       background: rgba(255,255,255,0.05);
     }
@@ -95,6 +151,63 @@
     .price {
       font-weight: bold;
     }
+
+    /* Слайдер */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      border-radius: var(--radius-main);
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: var(--box-shadow);
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .slider-buttons {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .slider-buttons button {
+      background-color: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* Адаптив */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+      h2 {
+        font-size: 1.2rem;
+      }
+      th, td {
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -102,174 +215,163 @@
 <div class="container">
   <h1>Калькулятор</h1>
 
-  <!-- Ввод подписчиков и постов -->
-  <div class="flex">
-    <div class="flex-col">
-      <label for="subsInput">Подписчиков на канале:</label>
-      <input type="number" id="subsInput" value="10000" min="0"/>
-    </div>
-    <div class="flex-col">
-      <label for="postsInput">Постов в месяц:</label>
-      <input type="number" id="postsInput" value="30" min="0"/>
-    </div>
-    <div class="flex-col">
-      <label for="percentInput">% новых подписчиков:</label>
-      <input type="number" id="percentInput" value="10" min="0" max="100"/>
-    </div>
-  </div>
+  <div class="main-wrapper">
 
-  <!-- Статистика за 1 пост -->
-  <div class="estimates">
-    <h2>Статистика за 1 пост</h2>
+    <!-- Блок ввода данных -->
     <div class="flex">
       <div class="flex-col">
-        <label for="viewsPost">Просмотры:</label>
-        <input type="number" id="viewsPost" value="0" min="0"/>
+        <label for="subsInput">Подписчиков на канале:</label>
+        <input type="number" id="subsInput" value="10000" min="0" />
       </div>
       <div class="flex-col">
-        <label for="reactsPost">Реакции:</label>
-        <input type="number" id="reactsPost" value="0" min="0"/>
+        <label for="postsInput">Постов в месяц:</label>
+        <input type="number" id="postsInput" value="30" min="0" />
+      </div>
+      <div class="flex-col">
+        <label for="percentInput">% новых подписчиков:</label>
+        <input type="number" id="percentInput" value="10" min="0" max="100" />
       </div>
     </div>
-    <div class="flex" style="margin-top: 10px;">
-      <div class="flex-col">
-        <label for="commentsPost">Комментарии:</label>
-        <input type="number" id="commentsPost" value="0" min="0"/>
-      </div>
-      <div class="flex-col">
-        <label for="repostsPost">Репосты:</label>
-        <input type="number" id="repostsPost" value="0" min="0"/>
-      </div>
-    </div>
-  </div>
 
-  <!-- Статистика за месяц (read-only) -->
-  <div class="estimates">
-    <h2>Примерная статистика за месяц</h2>
-    <div class="estimate-item">
-      <div>Просмотры:</div>
-      <div><span id="viewsMonth">0</span></div>
+    <!-- Статистика за 1 пост -->
+    <div class="estimates">
+      <h2>Статистика за 1 пост</h2>
+      <div class="flex">
+        <div class="flex-col">
+          <label for="viewsPost">Просмотры:</label>
+          <input type="number" id="viewsPost" value="0" min="0" />
+        </div>
+        <div class="flex-col">
+          <label for="reactsPost">Реакции:</label>
+          <input type="number" id="reactsPost" value="0" min="0" />
+        </div>
+      </div>
+      <div class="flex" style="margin-top: 10px;">
+        <div class="flex-col">
+          <label for="commentsPost">Комментарии:</label>
+          <input type="number" id="commentsPost" value="0" min="0" />
+        </div>
+        <div class="flex-col">
+          <label for="repostsPost">Репосты:</label>
+          <input type="number" id="repostsPost" value="0" min="0" />
+        </div>
+      </div>
     </div>
-    <div class="estimate-item">
-      <div>Реакции:</div>
-      <div><span id="reactsMonth">0</span></div>
-    </div>
-    <div class="estimate-item">
-      <div>Комментарии:</div>
-      <div><span id="commentsMonth">0</span></div>
-    </div>
-    <div class="estimate-item">
-      <div>Репосты:</div>
-      <div><span id="repostsMonth">0</span></div>
-    </div>
-    <div class="estimate-item">
-      <div>Подписчики (всего за месяц):</div>
-      <div><span id="subsMonth">0</span></div>
-    </div>
-  </div>
 
-  <!-- Сравнительный калькулятор -->
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px; /* задаёт минимальную ширину, чтобы на мобилках скроллилось */
-    }
-  
-    th, td {
-      padding: 8px 12px;
-      text-align: left;
-    }
-  
-    .right {
-      text-align: right;
-    }
-  
-    @media (max-width: 600px) {
-      table {
-        font-size: 14px;
-      }
-    }
-  </style>
-  <div class="final-table" style="overflow-x: auto; width: 100%;">
-    <h2>Сравнение c cheatbot.ru цен за месяц</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Параметр</th>
-          <th class="right">Кол-во (шт.)</th>
-          <th class="right">Цена конкурента</th>
-          <th class="right">Цена наша</th>
-          <th class="right">Конкурент итого</th>
-          <th class="right">Мы итого</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Подписчики -->
-        <tr>
-          <td>Подписчики</td>
-          <td id="subsQty" class="right">0</td>
-          <td id="subsCPrice" class="right">3</td>    <!-- можно менять на свои -->
-          <td id="subsOPrice" class="right">0.4375</td>  <!-- можно менять на свои -->
-          <td id="subsCompetitorCost" class="right price">0 ₽</td>
-          <td id="subsOurCost" class="right price">0 ₽</td>
-        </tr>
-        <!-- Просмотры -->
-        <tr>
-          <td>Просмотры</td>
-          <td id="viewsQty" class="right">0</td>
-          <td id="viewsCPrice" class="right">0.1</td>   <!-- можно менять на свои -->
-          <td id="viewsOPrice" class="right">0.015</td>  <!-- можно менять на свои -->
-          <td id="viewsCompetitorCost" class="right price">0 ₽</td>
-          <td id="viewsOurCost" class="right price">0 ₽</td>
-        </tr>
-        <!-- Реакции -->
-        <tr>
-          <td>Реакции</td>
-          <td id="reactsQty" class="right">0</td>
-          <td id="reactsCPrice" class="right">0.1</td>
-          <td id="reactsOPrice" class="right">0.1</td>
-          <td id="reactsCompetitorCost" class="right price">0 ₽</td>
-          <td id="reactsOurCost" class="right price">0 ₽</td>
-        </tr>
-        <!-- Комментарии -->
-        <tr>
-          <td>Комментарии</td>
-          <td id="commentsQty" class="right">0</td>
-          <td id="commentsCPrice" class="right">7</td>
-          <td id="commentsOPrice" class="right">1</td>
-          <td id="commentsCompetitorCost" class="right price">0 ₽</td>
-          <td id="commentsOurCost" class="right price">0 ₽</td>
-        </tr>
-        <!-- Репосты -->
-        <tr>
-          <td>Репосты</td>
-          <td id="repostsQty" class="right">0</td>
-          <td id="repostsCPrice" class="right">0.3</td>
-          <td id="repostsOPrice" class="right">0.0575</td>
-          <td id="repostsCompetitorCost" class="right price">0 ₽</td>
-          <td id="repostsOurCost" class="right price">0 ₽</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <th colspan="4" class="right">Сумма у конкурента:</th>
-          <th id="competitorTotal" class="right price">0 ₽</th>
-          <th></th>
-        </tr>
-        <tr>
-          <th colspan="5" class="right">Сумма у нас:</th>
-          <th id="ourTotal" class="right price">0 ₽</th>
-        </tr>
-      </tfoot>
-    </table>
-    <div style="text-align: center;">(данные cheatbot.ru от 01.04.2025)</div>
+    <!-- Статистика за месяц (итоги) -->
+    <div class="estimates">
+      <h2>Примерная статистика за месяц</h2>
+      <div class="estimate-item">
+        <div>Просмотры:</div>
+        <div><span id="viewsMonth">0</span></div>
+      </div>
+      <div class="estimate-item">
+        <div>Реакции:</div>
+        <div><span id="reactsMonth">0</span></div>
+      </div>
+      <div class="estimate-item">
+        <div>Комментарии:</div>
+        <div><span id="commentsMonth">0</span></div>
+      </div>
+      <div class="estimate-item">
+        <div>Репосты:</div>
+        <div><span id="repostsMonth">0</span></div>
+      </div>
+      <div class="estimate-item">
+        <div>Подписчики (всего за месяц):</div>
+        <div><span id="subsMonth">0</span></div>
+      </div>
+    </div>
+
+    <!-- Таблица сравнения -->
+    <div class="final-table">
+      <h2>Сравнение c cheatbot.ru цен за месяц</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th class="right">Кол-во (шт.)</th>
+            <th class="right">Цена конкурента</th>
+            <th class="right">Цена наша</th>
+            <th class="right">Конкурент итого</th>
+            <th class="right">Мы итого</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Подписчики</td>
+            <td id="subsQty" class="right">0</td>
+            <td id="subsCPrice" class="right">3</td>
+            <td id="subsOPrice" class="right">0.4375</td>
+            <td id="subsCompetitorCost" class="right price">0 ₽</td>
+            <td id="subsOurCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Просмотры</td>
+            <td id="viewsQty" class="right">0</td>
+            <td id="viewsCPrice" class="right">0.1</td>
+            <td id="viewsOPrice" class="right">0.015</td>
+            <td id="viewsCompetitorCost" class="right price">0 ₽</td>
+            <td id="viewsOurCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Реакции</td>
+            <td id="reactsQty" class="right">0</td>
+            <td id="reactsCPrice" class="right">0.1</td>
+            <td id="reactsOPrice" class="right">0.1</td>
+            <td id="reactsCompetitorCost" class="right price">0 ₽</td>
+            <td id="reactsOurCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Комментарии</td>
+            <td id="commentsQty" class="right">0</td>
+            <td id="commentsCPrice" class="right">7</td>
+            <td id="commentsOPrice" class="right">1</td>
+            <td id="commentsCompetitorCost" class="right price">0 ₽</td>
+            <td id="commentsOurCost" class="right price">0 ₽</td>
+          </tr>
+          <tr>
+            <td>Репосты</td>
+            <td id="repostsQty" class="right">0</td>
+            <td id="repostsCPrice" class="right">0.3</td>
+            <td id="repostsOPrice" class="right">0.0575</td>
+            <td id="repostsCompetitorCost" class="right price">0 ₽</td>
+            <td id="repostsOurCost" class="right price">0 ₽</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4" class="right">Сумма у конкурента:</th>
+            <th id="competitorTotal" class="right price">0 ₽</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th colspan="5" class="right">Сумма у нас:</th>
+            <th id="ourTotal" class="right price">0 ₽</th>
+          </tr>
+        </tfoot>
+      </table>
+      <div style="text-align: center; margin-top: 4px;">(данные cheatbot.ru от 01.04.2025)</div>
+    </div>
   </div>
 </div>
 
+<!-- Слайдер -->
+<div class="slider-container">
+  <div class="slider-track" id="sliderTrack">
+    <div class="slide"><img src="followers.png" alt="Подписчики"></div>
+    <div class="slide"><img src="views.png" alt="Просмотры"></div>
+    <div class="slide"><img src="reactions.png" alt="Реакции"></div>
+    <div class="slide"><img src="comments.png" alt="Комментарии"></div>
+  </div>
+  <div class="slider-buttons">
+    <button onclick="prevSlide()">←</button>
+    <button onclick="nextSlide()">→</button>
+  </div>
+</div>
 
 <script>
-  // Поля ввода
+  // Получаем элементы
   const subsInput       = document.getElementById('subsInput');
   const postsInput      = document.getElementById('postsInput');
   const percentInput    = document.getElementById('percentInput');
@@ -278,14 +380,12 @@
   const commentsPostInput = document.getElementById('commentsPost');
   const repostsPostInput  = document.getElementById('repostsPost');
 
-  // Итоговые поля за месяц (только чтение)
   const viewsMonthEl    = document.getElementById('viewsMonth');
   const reactsMonthEl   = document.getElementById('reactsMonth');
   const commentsMonthEl = document.getElementById('commentsMonth');
   const repostsMonthEl  = document.getElementById('repostsMonth');
   const subsMonthEl     = document.getElementById('subsMonth');
 
-  // Ячейки финальной таблицы
   const subsQtyEl            = document.getElementById('subsQty');
   const viewsQtyEl           = document.getElementById('viewsQty');
   const reactsQtyEl          = document.getElementById('reactsQty');
@@ -317,20 +417,19 @@
   const competitorTotalEl    = document.getElementById('competitorTotal');
   const ourTotalEl           = document.getElementById('ourTotal');
 
-  // При изменении "подписчиков" — автоматически пересчитываем значения за 1 пост
-  subsInput.addEventListener('input', ()=> {
+  // События
+  subsInput.addEventListener('input', () => {
     autoFillPostStats();
     recalcAll();
   });
-  percentInput.addEventListener('input', recalcAll);
-  // При изменении "постов" или ручном изменении полей "за 1 пост" — пересчёт
   postsInput.addEventListener('input', recalcAll);
+  percentInput.addEventListener('input', recalcAll);
   viewsPostInput.addEventListener('input', recalcAll);
   reactsPostInput.addEventListener('input', recalcAll);
   commentsPostInput.addEventListener('input', recalcAll);
   repostsPostInput.addEventListener('input', recalcAll);
 
-  // Заполняем статистику за 1 пост на основе количества подписчиков (примерные формулы).
+  // Автозаполнение статистики за 1 пост (примерные формулы)
   function autoFillPostStats() {
     const subs = parseFloat(subsInput.value) || 0;
     // Примерные формулы (среднее между min=0.6*subs и max=0.8*subs)
@@ -345,43 +444,36 @@
     repostsPostInput.value   = avgReps;
   }
 
-  // Основной пересчёт
+  // Пересчёт
   function recalcAll() {
     const subs  = parseFloat(subsInput.value)  || 0;
     const posts = parseFloat(postsInput.value) || 0;
 
-    // Статистика за 1 пост (если пользователь изменил вручную — используем её)
     const viewsPost  = parseFloat(viewsPostInput.value)  || 0;
     const reactsPost = parseFloat(reactsPostInput.value) || 0;
     const commsPost  = parseFloat(commentsPostInput.value) || 0;
     const repsPost   = parseFloat(repostsPostInput.value)  || 0;
 
-    // За месяц
-    // — умножаем все постовые показатели на количество постов
-    const viewsMonth     = viewsPost  * posts;
-    const reactsMonth    = reactsPost * posts;
-    const commsMonth     = commsPost  * posts;
-    const repsMonth      = repsPost   * posts;
-    // — «Подписчики за месяц» условно считаем subs * posts (как в ранних примерах),
-    //   либо здесь можно изменить логику, если нужно другое
-    const percentNew = parseFloat(percentInput.value) || 0;
-    const subsMonth = subs * (percentNew / 100);
+    const viewsMonth   = viewsPost * posts;
+    const reactsMonth  = reactsPost * posts;
+    const commsMonth   = commsPost * posts;
+    const repsMonth    = repsPost * posts;
 
-    // Запишем в блок "Статистика за месяц" (только чтение)
+    const percentNew   = parseFloat(percentInput.value) || 0;
+    const subsMonth    = subs * (percentNew / 100);
+
     viewsMonthEl.textContent    = formatNumber(viewsMonth);
     reactsMonthEl.textContent   = formatNumber(reactsMonth);
     commentsMonthEl.textContent = formatNumber(commsMonth);
     repostsMonthEl.textContent  = formatNumber(repsMonth);
     subsMonthEl.textContent     = formatNumber(subsMonth);
 
-    // Сравнительный калькулятор (таблица)
-    subsQtyEl.textContent     = formatNumber(subsMonth);
-    viewsQtyEl.textContent    = formatNumber(viewsMonth);
-    reactsQtyEl.textContent   = formatNumber(reactsMonth);
-    commentsQtyEl.textContent = formatNumber(commsMonth);
-    repostsQtyEl.textContent  = formatNumber(repsMonth);
+    subsQtyEl.textContent       = formatNumber(subsMonth);
+    viewsQtyEl.textContent      = formatNumber(viewsMonth);
+    reactsQtyEl.textContent     = formatNumber(reactsMonth);
+    commentsQtyEl.textContent   = formatNumber(commsMonth);
+    repostsQtyEl.textContent    = formatNumber(repsMonth);
 
-    // Читаем цены (конкурента / наши)
     const subsC  = parseFloat(subsCPriceEl.textContent)  || 0;
     const subsO  = parseFloat(subsOPriceEl.textContent)  || 0;
     const viewsC = parseFloat(viewsCPriceEl.textContent) || 0;
@@ -393,20 +485,18 @@
     const repC   = parseFloat(repostsCPriceEl.textContent) || 0;
     const repO   = parseFloat(repostsOPriceEl.textContent)  || 0;
 
-    // Расчёт: "кол-во" * "цена"
-    const competitorSubsCost      = subsMonth  * subsC;
-    const competitorViewsCost     = viewsMonth * viewsC;
-    const competitorReactsCost    = reactsMonth* reacC;
-    const competitorCommentsCost  = commsMonth * commC;
-    const competitorRepostsCost   = repsMonth  * repC;
+    const competitorSubsCost     = subsMonth * subsC;
+    const competitorViewsCost    = viewsMonth * viewsC;
+    const competitorReactsCost   = reactsMonth * reacC;
+    const competitorCommentsCost = commsMonth * commC;
+    const competitorRepostsCost  = repsMonth * repC;
 
-    const ourSubsCost      = subsMonth  * subsO;
+    const ourSubsCost      = subsMonth * subsO;
     const ourViewsCost     = viewsMonth * viewsO;
-    const ourReactsCost    = reactsMonth* reacO;
+    const ourReactsCost    = reactsMonth * reacO;
     const ourCommentsCost  = commsMonth * commO;
-    const ourRepostsCost   = repsMonth  * repO;
+    const ourRepostsCost   = repsMonth * repO;
 
-    // Запись в таблицу
     subsCompetitorCostEl.textContent      = formatRub(competitorSubsCost);
     subsOurCostEl.textContent             = formatRub(ourSubsCost);
     viewsCompetitorCostEl.textContent     = formatRub(competitorViewsCost);
@@ -418,17 +508,15 @@
     repostsCompetitorCostEl.textContent   = formatRub(competitorRepostsCost);
     repostsOurCostEl.textContent          = formatRub(ourRepostsCost);
 
-    // Итог
     const competitorTotal = competitorSubsCost + competitorViewsCost + competitorReactsCost
                           + competitorCommentsCost + competitorRepostsCost;
-    const ourTotal        = ourSubsCost + ourViewsCost + ourReactsCost
-                          + ourCommentsCost + ourRepostsCost;
+    const ourTotal = ourSubsCost + ourViewsCost + ourReactsCost
+                   + ourCommentsCost + ourRepostsCost;
 
     competitorTotalEl.textContent = formatRub(competitorTotal);
     ourTotalEl.textContent        = formatRub(ourTotal);
   }
 
-  // Форматирование
   function formatNumber(n) {
     return Math.round(n).toLocaleString('ru-RU');
   }
@@ -439,74 +527,8 @@
   // Инициализация
   autoFillPostStats();
   recalcAll();
-</script>
-<div class="slider-container">
-  <div class="slider-track" id="sliderTrack">
-    <div class="slide"><img src="followers.png" alt="Подписчики"></div>
-    <div class="slide"><img src="views.png" alt="Просмотры"></div>
-    <div class="slide"><img src="reactions.png" alt="Реакции"></div>
-    <div class="slide"><img src="comments.png" alt="Комментарии"></div>
-  </div>
-  <div class="slider-buttons">
-    <button onclick="prevSlide()">←</button>
-    <button onclick="nextSlide()">→</button>
-  </div>
-</div>
-<style>
-body {
-  display: flex;
-  flex-direction: column; /* вертикально, а не в ряд */
-  align-items: center;     /* по центру */
-  padding: 20px;
-  font-family: sans-serif;
-}
-  .content {
-    width: 60%;
-  }
 
-  .slider-container {
-    width: 35%;
-    max-width: 400px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-  .slider-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-  }
-
-  .slide {
-    min-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .slider-buttons {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-  }
-
-  .slider-buttons button {
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-  }
-</style>
-<script>
+  /* Логика слайдера */
   let currentSlide = 0;
   const track = document.getElementById('sliderTrack');
   const totalSlides = track.children.length;
@@ -525,5 +547,6 @@ body {
     updateSlider();
   }
 </script>
+
 </body>
 </html>
