@@ -169,6 +169,29 @@
   </div>
 
   <!-- Сравнительный калькулятор -->
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px; /* задаёт минимальную ширину, чтобы на мобилках скроллилось */
+    }
+  
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+  
+    .right {
+      text-align: right;
+    }
+  
+    @media (max-width: 600px) {
+      table {
+        font-size: 14px;
+      }
+    }
+  </style>
   <div class="final-table" style="overflow-x: auto; width: 100%;">
     <h2>Сравнение c cheatbot.ru цен за месяц</h2>
     <table>
